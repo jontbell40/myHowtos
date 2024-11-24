@@ -1,0 +1,352 @@
+\documentclass[22pt] {article}
+\usepackage{graphicx}
+\graphicspath{ {./images/} }
+\usepackage{multicol}
+\usepackage[utf8]{inputenc}
+\usepackage{listings}
+\usepackage{color}
+\definecolor{dkgreen}{rgb}{0,0.6,0}
+\definecolor{gray}{rgb}{0.5,0.5,0.5}
+\definecolor{mauve}{rgb}{0.58,0,0.82}
+
+\lstset{frame=tb,
+  language=Java,
+  aboveskip=3mm,
+  belowskip=3mm,
+  showstringspaces=false,
+  columns=flexible,
+  basicstyle={\small\ttfamily},
+  numbers=none,
+  numberstyle=\tiny\color{gray},
+  keywordstyle=\color{blue},
+  commentstyle=\color{dkgreen},
+  stringstyle=\color{mauve},
+  breaklines=true,
+  breakatwhitespace=true,
+  tabsize=3
+}
+
+\begin{document}
+
+\begin{center}
+		\vspace*{1cm}
+		\Huge
+		\textbf{Bash Notes}
+		\Large
+		
+		\vspace{0.5cm}
+		Basic Bash How-To (A Real language?)
+		
+		\vspace{1.5cm}
+		
+		\textbf{Jonathan Bell}
+		\vspace{1.5cm}
+		
+		\textbf{version 0.1}
+		
+		\vspace{4.2cm}
+		\includegraphics[scale=1,bb= 150 100 30 30]{bash.png}
+				
+\end{center}
+\pagebreak
+
+	\Huge
+	\section{Variables}
+	\Large
+	% Varaibles
+	Variables in bash are not strongly typed. You can define variables as such:-
+		\begin{lstlisting}
+			$>myvar=123   <-- do not leave spaces
+			$>myvar="Test" <-- do not leave spaces 
+	 	\end{lstlisting}
+	And then reference them as such:-
+		\begin{lstlisting}
+			$>echo "$myvar'
+		\end{lstlisting}
+Bash also uses special variables. for instance if you run a bash script the arguments can be gained from within a script:
+	\begin{lstlisting}
+	$>myscript.sh arg1 arg2
+	\end{lstlisting}
+The following is a summary of some of the more useful special arguments
+\begin{lstlisting}
+	$> echo $0 <-- returns myscriipt.sh
+	$> echo $1 <-- returns arg1
+	$> echo $2 < --returns arg2
+	$> echo $# <--returns the number of arguments past to the script (2)
+	$> echo $! <-- pid of the application last put into background mode
+	$> echo $$ <-- This returns the pid of  the shell
+	$> echo  $? <-- This shows the last result from calling an application
+\end{lstlisting}
+
+\vspace{22pt}
+
+A common example is to confirm the number of arguments past to a script. Showing an usage example if the number is incorrect.
+
+\pagebreak
+
+Example script:-
+
+
+\begin{lstlisting}
+#!/bin/bash
+
+usage()
+{
+	echo "Wrong number of Arguments given"
+	echo "Usage: test.sh arg1 arg2 arg3"
+}
+
+if [[ $#  != 3 ]]
+then
+usage;
+exit -1;
+fi
+
+echo "All is fine";
+
+\end{lstlisting}
+
+The preceding script shows some basic operations of a bash script. The first line often called the hash bang, tells the shell where to find the interpreter. Note this may be different on your system.
+It is useful to run the which command to find it. 
+\begin{lstlisting}
+$>which bash
+$>/bin/bash
+\end{lstlisting}
+
+The usage() is a function definition in bash. It is often useful to split your code up into sensible blocks.
+
+The if...fi is a decision block. Bash often starts and ends a functional areas with an inverted word  such as if,fi or case, esac
+
+The '[[ ]]' or  '[]'  are decision blocks, which will give different interpretations. Note a common mistake is not to ensure you have spaces within the block. 
+
+
+\pagebreak
+
+	\Huge
+	\section{If Comparisons}
+
+\large	
+	The 'if' command is often used within bash, it has the following format
+	
+	\begin{lstlisting}
+	if [ $value = "y" ] 
+	then
+	echo "do something"
+	elif [ $value = "n" ] 
+	then
+	echo "Do something else"
+	else
+	echo "Default action"
+	fi
+	\end{lstlisting}
+	 
+	You can also nest if blocks within other 'if blocks'.
+	
+\subsection{if Numeric Comparisons}
+\begin{lstlisting}
+	echo "Guess a Number 1-3 "
+	read val
+
+	if [  $val -eq 3 ];
+	 then
+	echo " you entered 3"
+	elif [ $val -eq 4 ]; then                                   
+	...
+	
+\end{lstlisting}
+
+
+\subsection{Using OR in a  if comparison}
+\begin{lstlisting}
+if [$age -gt 18 -o $age -lt 30 ]	 
+then                  
+echo "You can come in"            
+$>fi
+\end{lstlisting}
+
+\pagebreak
+\subsection{Other Numeric comparison }
+\begin{lstlisting}
+-a <- and
+-eq <- equal
+-ne <- not equal
+-lt <- less than
+-gt <- greater than 
+-ge <- greater or equal
+ -le less than or equal	
+\end{lstlisting}
+
+\subsection{String if Comparison}
+\begin{lstlisting}
+	z="Test"
+	y="Test" 
+	if  [ test $y=$z ] 
+	then
+	echo "The Same"
+	fi
+\end{lstlisting}
+
+\subsection{ Using the '[[]]' Method}
+ \begin{lstlisting}
+ 	
+ if [[ $z == $y ]]
+ 	then
+ 	echo "Same"
+ 	fi
+\end{lstlisting}
+
+Note with the '[['  use '== ' comparison,  and for '[' use the single '=' comparison
+
+\subsection{Checking for an empty string}
+ \begin{lstlisting}
+ 	if [ -z $str ]
+ 	then                           
+ 	echo "String is empty"
+ 	fi
+\end{lstlisting}
+
+\pagebreak
+
+ \subsection{Other  if String comparisons}
+ \begin{lstlisting}
+ 	-n <- not empty 
+ 	!= <-  not eqaul to
+ 	<,> <- alphabetical comparison
+ 	 =~  <- Regex check 	 
+ 	 if [ $z ~= '^[Te]' ];then
+ 	 echo "Starts with Te" 
+ 	 fi
+\end{lstlisting}
+
+\pagebreak
+\section{Loops}
+\subsection{for}
+
+\begin{lstlisting}
+	for I in {1,2,3,4}
+	do
+	echo "loop $i"
+	done
+\end{lstlisting}
+	
+\subsection{while}
+	
+\begin{lstlisting}
+	x=0
+	while [ $x -le 4 ];
+	do
+	echo "number = $x";
+	x=$((x + 1))
+	done
+\end{lstlisting}
+
+\subsection{Across a list of files}
+
+\begin{lstlisting}
+	for i in ./*
+	do
+	echo "file = $i" 
+	done
+\end{lstlisting}
+
+\pagebreak
+\section{Command Expansion}
+
+The () brackets  expand the results of an eternal command
+
+\begin{lstlisting}
+files=$(ls) <-- expands the list command into the variable files
+\end{lstlisting}
+
+Note you can also use `ls` back ticks to expand commands, however this is depreciated.  
+
+\pagebreak
+\section{Arithmetic  Expressions}
+The double (()) brackets can be used to perform numeric calculations
+\begin{lstlisting}
+mycal=$((2+3) ) <- aritmetic expansion 	
+\end{lstlisting}
+\pagebreak
+\section{Input and Output}
+\begin{lstlisting}
+read myvar
+read -p "Enter a value" myvar
+read -sp "Enter a password" mypass <-- hide what the user types
+\end{lstlisting}
+\pagebreak	
+\section{ The case statement}
+
+The case statement is often useful when you 
+have multiple choices to make
+
+	\begin{lstlisting}
+	echo "Type a Number"
+	read val
+	case $val in
+	1)
+	echo "You selected 1"
+	2)
+	echo "You selected 2"
+	*)
+	echo "Default"
+	esac
+\end{lstlisting}
+	 
+\section{Useful command from a bash terminal}
+
+\subsection{history}
+Bash will like a good shell keep a log of what you type, allowing you to scroll back to a  past command
+Search using Ctrl+s or Ctrl+r
+
+\begin{lstlisting}
+$> history <- show a list of commands
+$>!59 <- run command 59 again
+$>history -w <-- write the history to the .bash_histroy file
+$> history -c <-- clear your history
+$> history -d 58 < -delete line 58 from history, ueful if you type a password in by mistake
+\end{lstlisting}
+
+\subsection{aliases} 
+You can create an alias for a command, this is useful if you want to create your own command from
+a list of commands or command options, the most famous of these being 'll' which is an alias to 'ls -al'
+\begin{lstlisting}
+$>alias GREPC="find . -type f -name '*.[ch]" -exec grep -iHn $1  \{} \;"
+$> GREPC main <-- searches all c files for the word main
+\end{lstlisting}
+
+It should be noted that you can alias an existing command. So for instance you can have an alias of the ls command.
+\begin{lstlisting}
+$>alias ls="ls -l" <- ALias ls
+$>ls <- now uses the alias
+$>\ls <- uses the original version
+$>alias -p <- see what aliases are available.
+\end{lstlisting}
+
+
+
+\subsection{Pipes and redirection}
+Pipe a output from one command to the input of another command
+\begin{lstlisting}
+	cat file.txt | sed 's/word/Word/g' <- prints the content of file.txt passes this to sed to search for word and replace it by Word, note if you put -i in the sed command it will change the input file.   
+\end{lstlisting}
+Redirection to a file
+\begin{lstlisting}
+$>echo "Hello World" > file.txt <- write to file flushing content
+$>echo "Hello World Again >> file.txt <- append to existing content
+$>gmake  2>&1 result.txt <-Print both standard output and standard error to a file
+ \end{lstlisting}
+ 
+ 
+\subsection{Configuration files}
+Dependent on the platform, git bash, bash or QNX terminal configuration files are available to store aliases,functions etc for continuous use.
+\paragraph{}
+Common files include .bashrc <- basic settings
+\paragraph{}
+												 .profile <- often for aliases
+\subsection{Debugging Bash }
+\begin{lstlisting}
+	set -x <- enablle debuf on your terminal
+	set +x <-switch off debug
+\end{lstlisting}	
+
+\end{document}
